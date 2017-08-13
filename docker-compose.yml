@@ -43,8 +43,6 @@ services:
     environment:
       VIRTUAL_HOST: gitlab.darno.love,www.gitlab.darno.love
       VIRTUAL_NETWORK: nginx-proxy
-      LETSENCRYPT_HOST: gitlab.darno.love
-      LETSENCRYPT_EMAIL: eugenio00@gmail.com
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://gitlab.darno.love'
     ports:
