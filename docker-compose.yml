@@ -36,23 +36,43 @@ services:
   #   environment:
   #     - NGINX_DOCKER_GEN_CONTAINER=nginx-gen
 
-  gitlab:
-    image: 'gitlab/gitlab-ce:latest'
-    restart: always
-    hostname: 'gitlab.darno.love'
-    environment:
-      VIRTUAL_HOST: gitlab.darno.love,www.gitlab.darno.love
-      VIRTUAL_NETWORK: nginx-proxy
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://gitlab.darno.love'
-    ports:
-      - '8081:80'
-      - '8082:443'
-      - '8085:22'
-    volumes:
-      - '/srv/gitlab/config:/etc/gitlab'
-      - '/srv/gitlab/logs:/var/log/gitlab'
-      - '/srv/gitlab/data:/var/opt/gitlab'
+  # gitlab:
+  #   image: 'gitlab/gitlab-ce:latest'
+  #   restart: always
+  #   hostname: 'gitlab.darno.love'
+  #   environment:
+  #     VIRTUAL_HOST: gitlab.darno.love,www.gitlab.darno.love
+  #     VIRTUAL_NETWORK: nginx-proxyt
+  #     GITLAB_OMNIBUS_CONFIG: |
+  #       external_url 'https://gitlab.darno.love'
+  #   ports:
+  #     - '8081:80'
+  #     - '8082:443'
+  #     - '8085:22'
+  #   volumes:
+  #     - '/srv/gitlab/config:/etc/gitlab'
+  #     - '/srv/gitlab/logs:/var/log/gitlab'
+  #     - '/srv/gitlab/data:/var/opt/gitlab'
+
+  wordpress:
+      image: wordpress:latest # https://hub.docker.com/_/wordpress/
+      ports:
+        - 8080:80 # change ip if required
+      volumes:
+        - ./wp-app:/var/www/html # Full wordpress project
+        - ./plugin-name/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
+        - ./theme-name/trunk/:/var/www/html/wp-content/themes/theme-name # Theme development
+      environment:
+        WORDPRESS_DB_HOST: mysql
+        WORDPRESS_DB_NAME: wordpress
+        WORDPRESS_DB_USER: root
+        WORDPRESS_DB_PASSWORD: password
+        VIRTUAL_HOST: blog.darno.love,www.blog.darno.love
+        VIRTUAL_NETWORK: nginx-proxy
+        LETSENCRYPT_HOST: blog.darno.love
+        LETSENCRYPT_EMAIL: eugenio00@gmail.com
+      depends_on:
+        - mysql
 
   # mysql:
   #   restart: always
