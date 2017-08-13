@@ -1,40 +1,41 @@
-version: "2"
+version: '2'
+
 services:
-  nginx:
-    restart: always
-    image: nginx
-    container_name: nginx
+
+  wordpress:
+    image: pattonwebz/wordpress-php7-1-apache-memcached
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/etc/nginx/conf.d"
-      - "/etc/nginx/vhost.d"
-      - "/usr/share/nginx/html"
-      - "./volumes/sslcerts:/etc/nginx/certs:ro"
-
-  nginx-gen:
-    restart: always
-    image: jwilder/docker-gen
-    container_name: nginx-gen
-    volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "./volumes/proxy/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
-    volumes_from:
-      - nginx
-    entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
-
-  letsencrypt-nginx-proxy-companion:
-    restart: always
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-nginx-proxy-companion
-    volumes_from:
-      - nginx
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./volumes/sslcerts:/etc/nginx/certs:rw"
+      - 80
     environment:
-      - NGINX_DOCKER_GEN_CONTAINER=nginx-gen
+      WORDPRESS_DB_USER: database
+      WORDPRESS_DB_PASSWORD: kgB7yJCwGYq2jeQH
+      WORDPRESS_DB_NAME: wp_database
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DB_HOST: mysql:3306
+      VIRTUAL_HOST: blog.darno.love,www.blog.darno.love
+#      VIRTUAL_PROTO: https
+      LETSENCRYPT_HOST: blog.darno.love,www.blog.darno.love
+      LETSENCRYPT_EMAIL: eugenio00@gmail.com.com
+    volumes:
+      - data_volume:/var/www/html
+      - ./volumes/home/wp:/home/wp
+    links:
+      - mysql:mysql
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: wp_database
+      MYSQL_USER: database
+      MYSQL_PASSWORD: mysqlpass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./volumes/home/db:/home/db
+
+volumes:
+    db_data:
+    data_volume:
 
 networks:
   default:
