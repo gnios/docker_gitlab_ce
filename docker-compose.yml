@@ -50,7 +50,7 @@ services:
     ports:
       - '8081:80'
       - '8082:443'
-      - '8082:22'
+      - '8085:22'
     volumes:
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
