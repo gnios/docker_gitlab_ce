@@ -62,6 +62,8 @@ services:
         - ./wp-app:/var/www/html # Full wordpress project
         - ./plugin-name/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
         - ./theme-name/trunk/:/var/www/html/wp-content/themes/theme-name # Theme development
+      links:
+        - mariadb:mysql
       environment:
         WORDPRESS_DB_HOST: mariadb
         WORDPRESS_DB_NAME: wordpress
