@@ -17,7 +17,7 @@ services:
       LETSENCRYPT_HOST: blog.darno.love,www.blog.darno.love
       LETSENCRYPT_EMAIL: eugenio00@gmail.com.com
     volumes:
-      - data_volume:/var/www/html
+      - ./volumes/var/www/html:/var/www/html
       - ./volumes/home/wp:/home/wp
     links:
       - mysql:mysql
@@ -30,12 +30,8 @@ services:
       MYSQL_USER: database
       MYSQL_PASSWORD: mysqlpass
     volumes:
-      - db_data:/var/lib/mysql
+      - ./volumes/var/lib/mysql:/var/lib/mysql
       - ./volumes/home/db:/home/db
-
-volumes:
-    db_data:
-    data_volume:
 
 networks:
   default:
