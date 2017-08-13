@@ -8,7 +8,7 @@ services:
       - 80
     environment:
       WORDPRESS_DB_USER: database
-      WORDPRESS_DB_PASSWORD: kgB7yJCwGYq2jeQH
+      WORDPRESS_DB_PASSWORD: mysqlpass
       WORDPRESS_DB_NAME: wp_database
       WORDPRESS_TABLE_PREFIX: wp_
       WORDPRESS_DB_HOST: mysql:3306
