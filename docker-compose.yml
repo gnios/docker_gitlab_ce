@@ -30,7 +30,6 @@ services:
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     environment:
-#      ACME_CA_URI: https://acme-staging.api.letsencrypt.org/directory
        NGINX_DOCKER_GEN_CONTAINER:dockergen
     container_name: nginx-letsencrypt
     volumes_from:
