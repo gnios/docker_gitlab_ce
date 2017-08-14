@@ -36,64 +36,28 @@ services:
   #   environment:
   #     - NGINX_DOCKER_GEN_CONTAINER=nginx-gen
 
-  gitlab:
-    image: 'gitlab/gitlab-ce:latest'
+  mautic:
     restart: always
-    hostname: 'gitlab.darno.love'
-    environment:
-      VIRTUAL_HOST: mysql.darno.love,www.mysql.darno.love
+    image: mautic/mautic
+    depends_on:
+      - mysql
     ports:
-      - '9080:80'
-      - '9443:443'
-      - '9022:22'
-    volumes:
-      - './volumes/srv/gitlab/config:/etc/gitlab'
-      - './volumes/srv/gitlab/logs:/var/log/gitlab'
-      - './volumes/srv/gitlab/data:/var/opt/gitlab'
-     
-  wordpress:
-      image: wordpress:latest # https://hub.docker.com/_/wordpress/
-      ports:
-        - 8080:80 # change ip if required
-      volumes:
-        - ./wp-app:/var/www/html # Full wordpress project
-        - ./plugin-name/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
-        - ./theme-name/trunk/:/var/www/html/wp-content/themes/theme-name # Theme development
-      environment:
-        WORDPRESS_DB_HOST: mariadb
-        WORDPRESS_DB_NAME: wordpress
-        WORDPRESS_DB_USER: mysqlroot
-        WORDPRESS_DB_PASSWORD: mysqlpass
-        VIRTUAL_HOST: blog.darno.love,www.blog.darno.love
-        VIRTUAL_NETWORK: nginx-proxy
-        # LETSENCRYPT_HOST: blog.darno.love
-        # LETSENCRYPT_EMAIL: eugenio00@gmail.com
+      - "8081:80"
+    environment:
+      MAUTIC_DB_HOST: mysql
+      MAUTIC_DB_USER: mautic
+      MAUTIC_DB_PASSWORD: mauticdbpass
+      MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+      VIRTUAL_HOST: darno.love,www.darno.love
+      VIRTUAL_NETWORK: nginx-proxy
+      # LETSENCRYPT_HOST: ascendejogos.com.br
+      # LETSENCRYPT_EMAIL: eugenio00@gmail.com
 
   mysql:
     restart: always
     image: mariadb
-    ports:
-      - '8083:3306'
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_USER: mysqlroot
-      MYSQL_PASSWORD: mysqlpass
-      VIRTUAL_HOST: mysql.darno.love,www.mysql.darno.love
-      VIRTUAL_NETWORK: nginx-proxy
-      # LETSENCRYPT_HOST: mysql.darno.love
-      # LETSENCRYPT_EMAIL: eugenio00@gmail.com
-
-  mongodb:
-    restart: always
-    image: mongo:latest
-    container_name: "mongodb"
-    environment:
-      VIRTUAL_HOST: mongodb.darno.love,www.mongodb.darno.love
-      VIRTUAL_NETWORK: nginx-proxy
-      # LETSENCRYPT_HOST: mongodb.darno.love
-      # LETSENCRYPT_EMAIL: eugenio00@gmail.com
-    volumes:
-      - ./data/db:/data/db
-    ports:
-        - 8084:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+      MYSQL_ROOT_PASSWORD: mysqlrootpassword
+      MYSQL_DATABASE: mautic
+      MYSQL_USER: mautic
+      MYSQL_PASSWORD: mauticdbpass
