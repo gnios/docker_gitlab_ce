@@ -42,7 +42,7 @@ services:
     depends_on:
       - mysql
     ports:
-      - "8081:80"
+      - "7081:80"
     environment:
       WORDPRESS_DB_PASSWORD: mysqlrootpassword
       VIRTUAL_HOST: blog.darno.love,www.blog.darno.love
