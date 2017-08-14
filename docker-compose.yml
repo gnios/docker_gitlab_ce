@@ -47,9 +47,9 @@ services:
         external_url 'https://gitlab.darno.love'
         # Add any other gitlab.rb configuration here, each on its own line
     ports:
-      - '8081:80'
-      - '8082:443'
-      - '8083:22'
+      - '9081:80'
+      - '9082:443'
+      - '9083:22'
     volumes:
       - './volumes/srv/gitlab/config:/etc/gitlab'
       - './volumes/srv/gitlab/logs:/var/log/gitlab'
