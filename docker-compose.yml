@@ -7,29 +7,24 @@ services:
     ports:
       - 8081:80
     environment:
-      WORDPRESS_DB_USER: database
-      WORDPRESS_DB_PASSWORD: kgB7yJCwGYq2jeQH
+      WORDPRESS_DB_PASSWORD: mysqlpass
       WORDPRESS_DB_NAME: wp_database
       WORDPRESS_TABLE_PREFIX: wp_
       WORDPRESS_DB_HOST: mysql_suffix:3306
       VIRTUAL_HOST: blog.darno.love,www.blog.darno.love
       VIRTUAL_PROTO: https
-      LETSENCRYPT_HOST: blog.darno.love,www.blog.darno.love
-      LETSENCRYPT_EMAIL: eugenio00@gmail.com
+      # LETSENCRYPT_HOST: blog.darno.love,www.blog.darno.love
+      # LETSENCRYPT_EMAIL: eugenio00@gmail.com
     volumes:
       - data_volume:/var/www/html
       - ./home/wp:/home/wp
     links:
-      - mysql:mysql_suffix
+      - mysql:mysql
 
   mysql:
     image: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-      MYSQL_DATABASE: wp_database
-      MYSQL_USER: database
-      MYSQL_PASSWORD: kgB7yJCwGYq2jeQH
+      MYSQL_ROOT_PASSWORD: mysqlpass
     volumes:
       - db_data:/var/lib/mysql
       - ./volumes/home/db:/home/db
@@ -39,7 +34,7 @@ services:
     volumes_from:
       - wordpress
     links:
-      - mysql:mysql_suffix
+      - mysql:mysql
     entrypoint: wp
     command: "--info"
 
